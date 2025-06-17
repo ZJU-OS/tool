@@ -1,0 +1,71 @@
+gitlab:
+  url: https://git.zju.edu.cn/api/v4
+  token: your-gitlab-token
+
+data_root: data # Path to store all data, including student submissions, plagiarism results, etc.
+
+repo:
+  group: Compiler/2025  # Group name in GitLab where student repositories will be created
+  import_url: https://git.zju.edu.cn/compiler/sp25-starter.git  # starter code repository URL
+
+
+# Deadline configuration (all times are in UTC+8)
+ddl:  # UTC+8
+  lab0: 2025-02-24 05:00:00
+  lab1: 2025-03-24 05:00:00
+  lab2: 2025-04-14 05:00:00
+  lab3: 2025-05-12 05:00:00
+  lab4: 2025-06-03 05:00:00
+  bonus1: 2025-06-09 05:00:00
+  bonus2: 2025-06-09 05:00:00
+  bonus3: 2025-06-09 05:00:00
+
+moss_id: your-moss-user-id  # MOSS ID for plagiarism detection
+
+# for plagiarism detection
+plagiarism:
+  jplag_path: path-to-jplag-jar  # Path to the JPlag jar file
+  previous_path: path-to-previous-repos # Path to the previous semester's repositories
+  template_path: path-to-template # Path to the template repository
+  skip_keywords:  # List of file path keywords to skip
+    - .tab
+    - .yy
+    - flex
+    - bison
+    - CMakeFiles
+    - riscv32-prebuilt
+    - gcc-13.2.0
+    - sp25-tests
+    - site-packages
+    - third_party_fmt
+
+# for better readability in moss results
+teacher2name:
+  chenmingshuai: 陈明帅
+  liuzhongxin: 刘忠鑫
+  liying: 李莹
+  ludongming: 鲁东明
+  wangqiang: 王强
+  yaopeisen: 姚培森
+
+# Whitelist of SHA256 for repo files. Use to manually verify files that should not change.
+sha256_whitelist:
+  cpp:
+    .gitlab-ci.yml:
+      - 22a2fc97135284da957cbfa45b8863555891c0ac9f7cfa2ad9e3ce8e789d1ba5
+      - 0f3beac751b790d9799f61e70ab0af1955ad94f4e2e6a46528c4a72950768227  # CRLF
+    Makefile:
+      - b99a3da376bdc0a62b145e71c8d25017279b0b4d499e4cf4602223d0e9339dfd
+      - 651ab207f3d38f44b52876e3110a6ba967905d187b72e0d46b80032f919b3883  # CRLF
+      - b63882f20ff671941ae999b5659bcd9b708ae9a348eb465ead5aa722f921aafa  # 文末换行
+    build.sh:
+      - 0cde680dd49736f642721adff0a2f0a69719e7c736e43cc98f8357c85d5cae9b
+  ocaml:
+    .gitlab-ci.yml:
+      - df90b624dc73d77573d8486c5439951d498b59acd1dbbe0dd45cb243194c8f04  # CRLF
+    dune-project:
+      - 3387fb4a9dc6f73236a0f3fad89dede8b777602fd453bfaf10bfa8493cfffbcf
+    sp25_starter_OCaml.opam:
+      - 9abf6c9b09ad929900194d1556173a4cbc4e3d7669a6364166f5b3649c626348
+    build.sh:
+      - eadd989392d384b520d05fea57d8dcbcbbc7efe96b0515f2127a3a7f819a4c48
