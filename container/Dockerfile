@@ -37,7 +37,7 @@ ENV LANGUAGE=en_US:en
 # https://www.debian.org/doc/manuals/debian-kernel-handbook/ch-common-tasks.html
 RUN <<EOF
 apt-get build-dep -y linux
-apt-get install -y linux-source build-essential fakeroot devscripts rsync git linux-headers-amd64
+apt-get install -y linux-source build-essential fakeroot devscripts rsync git
 tar xaf /usr/src/linux-source-*.tar.xz -C /zju-os
 EOF
 

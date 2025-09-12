@@ -6,5 +6,6 @@ services:
     hostname: zju-os-tool
     volumes:
       - ./:/zju-os/tool
+    working_dir: /zju-os/tool
     init: true
     entrypoint: ["sleep", "infinity"]

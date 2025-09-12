@@ -13,11 +13,17 @@ clean:
 	docker compose down -v --remove-orphans
 
 build-image:
-	docker build -t $(IMAGE_NAME) . # --no-cache
+	docker buildx build -t $(IMAGE_NAME) . # --no-cache
 
 push-image:
 	docker login git.zju.edu.cn:5050
 	docker push git.zju.edu.cn:5050/os/tool
+
+build-push-multi:
+	docker buildx build \
+		--platform linux/amd64,linux/arm64 \
+		--push \
+		-t $(IMAGE_NAME) . # --no-cache
 
 # inside docker
 build-rootfs:
