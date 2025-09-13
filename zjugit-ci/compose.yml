@@ -1,0 +1,13 @@
+# https://docs.docker.com/reference/compose-file/
+services:
+  zju-os-runner:
+    image: gitlab/gitlab-runner
+    container_name: zju-os-runner
+    hostname: zju-os-runner
+    volumes:
+      - ./config:/etc/gitlab-runner
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - TZ=Asia/Shanghai
+    # ports:
+    #   - "8093:8093"
