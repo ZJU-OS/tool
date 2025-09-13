@@ -49,13 +49,6 @@ apt-get install -y \
     qemu-system-riscv
 EOF
 
-# Rootfs
-RUN <<EOF
-git clone --depth=1 git://git.busybox.net/buildroot
-EOF
-# Copy if exist
-COPY rootfs.ext2* .
-
 # Utils
 RUN <<EOF
 apt-get install -y fish vim tree tmux \
@@ -64,4 +57,13 @@ apt-get install -y fish vim tree tmux \
 
 apt-get autoremove
 apt-get clean
+EOF
+
+# Rootfs
+COPY *.zip .
+RUN <<EOF
+git clone --depth=1 git://git.busybox.net/buildroot
+unzip fat32.img.zip
+unzip rootfs.ext2.zip
+rm *.zip
 EOF
