@@ -53,7 +53,8 @@ EOF
 RUN <<EOF
 apt-get install -y fish vim tree tmux \
     clangd bear clang-format clang-tidy \
-    wget curl
+    wget curl btop
+chsh -s /usr/bin/fish
 
 apt-get autoremove
 apt-get clean
@@ -66,4 +67,20 @@ git clone --depth=1 git://git.busybox.net/buildroot
 unzip fat32.img.zip
 unzip rootfs.ext2.zip
 rm *.zip
+EOF
+
+# Spike
+ADD https://mirrors.zju.edu.cn/debian/dists/unstable/main/installer-riscv64/current/images/netboot/debian-installer/riscv64/initrd.gz .
+RUN <<EOF
+apt-get install -y openocd
+git clone --depth=1 https://github.com/riscv-software-src/riscv-isa-sim
+cd riscv-isa-sim
+apt-get install -y device-tree-compiler libboost-regex-dev libboost-system-dev
+mkdir build
+cd build
+../configure
+make -j$(nproc)
+make install
+cd ..
+rm -rf build
 EOF
