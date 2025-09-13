@@ -1,5 +1,6 @@
 CONTAINER_NAME := zju-os-tool
 IMAGE_NAME := git.zju.edu.cn:5050/os/tool
+IMAGE_TAG := $$(uname -m)
 BUILD_ROOT_PATH := /zju-os/buildroot
 
 # run on host
@@ -13,17 +14,41 @@ clean:
 	docker compose down -v --remove-orphans
 
 build-image:
-	docker buildx build -t $(IMAGE_NAME) . # --no-cache
+	docker buildx build \
+		-t $(IMAGE_NAME):$(IMAGE_TAG) . # --no-cache
 
 push-image:
 	docker login git.zju.edu.cn:5050
-	docker push git.zju.edu.cn:5050/os/tool
+	docker push git.zju.edu.cn:5050/os/tool:$(IMAGE_TAG)
 
-build-push-multi:
-	docker buildx build \
-		--platform linux/amd64,linux/arm64 \
-		--push \
-		-t $(IMAGE_NAME) . # --no-cache
+push-multi:
+	docker pull $(IMAGE_NAME):arm64
+	docker pull $(IMAGE_NAME):x86_64
+	docker manifest create $(IMAGE_NAME):latest \
+		--amend $(IMAGE_NAME):arm64 \
+		--amend $(IMAGE_NAME):x86_64
+	docker manifest push $(IMAGE_NAME):latest
+
+# https://www.docker.com/blog/multi-arch-build-and-images-the-simple-way/
+# I can't make these methods work on my laptop
+# build-push-multi:
+# 	docker buildx build \
+# 		--platform linux/amd64,linux/arm64 \
+# 		--push \
+# 		-t $(IMAGE_NAME) .
+# build-push-multi:
+# 	docker build \
+# 		--platform linux/amd64 \
+# 		-t $(IMAGE_NAME):latest .
+# 	docker push $(IMAGE_NAME):latest
+# 	docker build \
+# 		--platform linux/arm64 \
+# 		-t $(IMAGE_NAME):manifest-arm64 .
+# 	docker push $(IMAGE_NAME):manifest-arm64
+# 	docker manifest create $(IMAGE_NAME):latest \
+# 		$(IMAGE_NAME):manifest-arm64 \
+# 		$(IMAGE_NAME):latest
+# 	docker manifest push $(IMAGE_NAME):latest
 
 build-fat32:
 	@if [ "$$(id -u)" -ne 0 ]; then \
