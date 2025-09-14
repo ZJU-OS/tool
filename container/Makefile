@@ -1,6 +1,10 @@
 CONTAINER_NAME := zju-os-tool
 IMAGE_NAME := git.zju.edu.cn:5050/os/tool
 IMAGE_TAG := $$(uname -m)
+# aarch64 is same as arm64
+ifeq ($(IMAGE_TAG),aarch64)
+	IMAGE_TAG := arm64
+endif
 BUILD_ROOT_PATH := /zju-os/buildroot
 
 # run on host
