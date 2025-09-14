@@ -1,0 +1,12 @@
+gitlab:
+  url: https://git.zju.edu.cn
+  private_token: <YOUR_PRIVATE_TOKEN_HERE>
+
+course:
+  group: example-course
+  term: example-term
+  upstream: example-course/example-repo
+  student_repo_prefix: example-
+
+deadline:
+  lab0: "2025-10-01 23:59:59 +0800"
