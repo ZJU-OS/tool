@@ -1,6 +1,6 @@
 CONTAINER_NAME := zju-os-tool
 IMAGE_NAME := git.zju.edu.cn:5050/os/tool
-IMAGE_TAG := $$(uname -m)
+IMAGE_TAG := $(shell uname -m)
 # aarch64 is same as arm64
 ifeq ($(IMAGE_TAG),aarch64)
 	IMAGE_TAG := arm64
