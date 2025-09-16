@@ -5,7 +5,6 @@ IMAGE_TAG := $(shell uname -m)
 ifeq ($(IMAGE_TAG),aarch64)
 	IMAGE_TAG := arm64
 endif
-BUILD_ROOT_PATH := /zju-os/buildroot
 
 # run on host
 all:
@@ -98,6 +97,7 @@ build-fat32:
 
 # inside docker
 build-rootfs:
-	make -C $(BUILD_ROOT_PATH) ARCH=riscv64 CROSS_COMPILE=riscv64-linux-gnu- qemu_riscv64_virt_defconfig
-	make -C $(BUILD_ROOT_PATH) ARCH=riscv64 CROSS_COMPILE=riscv64-linux-gnu- -j$(nproc)
-	zip ./rootfs.ext2.zip $(BUILD_ROOT_PATH)/output/images/rootfs.ext2
+	git clone --depth=1 git://git.busybox.net/buildroot.git ../buildroot
+	make -C ../buildroot ARCH=riscv64 CROSS_COMPILE=riscv64-linux-gnu- qemu_riscv64_virt_defconfig
+	make -C ../buildroot ARCH=riscv64 CROSS_COMPILE=riscv64-linux-gnu- -j$(nproc)
+	zip ./rootfs.ext2.zip ../buildroot/output/images/rootfs.ext2

@@ -62,7 +62,6 @@ EOF
 
 # Rootfs
 COPY *.zip .
-ADD git://git.busybox.net/buildroot.git .
 RUN <<EOF
 unzip fat32.img.zip
 unzip rootfs.ext2.zip
@@ -71,16 +70,16 @@ EOF
 
 # Spike
 ADD https://mirrors.zju.edu.cn/debian/dists/unstable/main/installer-riscv64/current/images/netboot/debian-installer/riscv64/initrd.gz .
-ADD https://github.com/riscv-software-src/riscv-isa-sim.git .
+RUN apt-get install -y openocd \
+    device-tree-compiler libboost-regex-dev libboost-system-dev
+ADD https://github.com/riscv-software-src/riscv-isa-sim.git riscv-isa-sim
 RUN <<EOF
-apt-get install -y openocd
 cd riscv-isa-sim
-apt-get install -y device-tree-compiler libboost-regex-dev libboost-system-dev
 mkdir build
 cd build
 ../configure
 make -j$(nproc)
 make install
-cd ..
-rm -rf build
+cd ../..
+rm -rf riscv-isa-sim
 EOF
