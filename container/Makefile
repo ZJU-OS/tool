@@ -18,21 +18,15 @@ clean:
 
 build-image:
 	docker buildx build \
-		-t $(IMAGE_NAME):$(IMAGE_TAG) . # --no-cache
+		-t $(IMAGE_NAME):$(IMAGE_TAG) . --no-cache
 
-push-image: build-image
+push-image:
 	docker login git.zju.edu.cn:5050
 	docker push git.zju.edu.cn:5050/os/tool:$(IMAGE_TAG)
 
 push-multi: push-image
-	# DO NOT pull the SAME arch image
-	# or the newly built image will be OVERWRITTEN
-	case "$(IMAGE_TAG)" in \
-		"arm64")   OTHER_ARCH="x86_64"; ;; \
-		"x86_64")  OTHER_ARCH="arm64"; ;; \
-		*) echo "Unsupported architecture: $(IMAGE_TAG)"; exit 1; ;; \
-	esac; \
-		docker pull $(IMAGE_NAME):$${OTHER_ARCH}
+	docker pull $(IMAGE_NAME):arm64
+	docker pull $(IMAGE_NAME):x86_64
 	docker manifest rm $(IMAGE_NAME):latest || true
 	docker image rm $(IMAGE_NAME):latest || true
 	docker manifest create $(IMAGE_NAME):latest \

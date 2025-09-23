@@ -1,4 +1,6 @@
 # https://docs.docker.com/reference/dockerfile/
+FROM ghcr.io/astral-sh/uv:latest AS uv-distroless
+
 FROM debian:testing
 
 ENV DEBIAN_FRONTEND=noninteractive
@@ -55,9 +57,6 @@ apt-get install -y fish vim tree tmux \
     clangd bear clang-format clang-tidy \
     wget curl btop
 chsh -s /usr/bin/fish
-
-apt-get autoremove
-apt-get clean
 EOF
 
 # Rootfs
@@ -82,4 +81,13 @@ make -j$(nproc)
 make install
 cd ../..
 rm -rf riscv-isa-sim
+EOF
+
+# uv
+COPY --from=uv-distroless /uv /uvx /usr/local/bin
+
+# Clean up
+RUN <<EOF
+apt-get autoremove
+apt-get clean
 EOF
