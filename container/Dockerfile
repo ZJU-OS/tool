@@ -66,13 +66,14 @@ unzip fat32.img.zip
 unzip rootfs.ext2.zip
 rm *.zip
 EOF
+ADD https://mirrors.zju.edu.cn/debian/dists/unstable/main/installer-riscv64/current/images/netboot/debian-installer/riscv64/initrd.gz .
 
 # Spike
-ADD https://mirrors.zju.edu.cn/debian/dists/unstable/main/installer-riscv64/current/images/netboot/debian-installer/riscv64/initrd.gz .
-RUN apt-get install -y openocd \
-    device-tree-compiler libboost-regex-dev libboost-system-dev
-ADD https://github.com/riscv-software-src/riscv-isa-sim.git riscv-isa-sim
+# ADD https://github.com/riscv-software-src/riscv-isa-sim.git riscv-isa-sim
+ADD https://fast-mirror.isrc.ac.cn/riscv-toolchains/git/riscv-software-src/riscv-isa-sim.git riscv-isa-sim
 RUN <<EOF
+apt-get install -y openocd \
+    device-tree-compiler libboost-regex-dev libboost-system-dev
 cd riscv-isa-sim
 mkdir build
 cd build
@@ -85,6 +86,12 @@ EOF
 
 # uv
 COPY --from=uv-distroless /uv /uvx /usr/local/bin
+
+# source code
+RUN <<EOF
+apt-get source qemu-system-riscv
+rm -f qemu_*.dsc qemu_*.tar.*
+EOF
 
 # Clean up
 RUN <<EOF

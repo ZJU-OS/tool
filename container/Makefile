@@ -30,8 +30,8 @@ push-multi: push-image
 	docker manifest rm $(IMAGE_NAME):latest || true
 	docker image rm $(IMAGE_NAME):latest || true
 	docker manifest create $(IMAGE_NAME):latest \
-		$(IMAGE_NAME):arm64 \
-		$(IMAGE_NAME):x86_64
+		--amend $(IMAGE_NAME):arm64 \
+		--amend $(IMAGE_NAME):x86_64
 	docker manifest push $(IMAGE_NAME):latest
 
 # https://www.docker.com/blog/multi-arch-build-and-images-the-simple-way/
